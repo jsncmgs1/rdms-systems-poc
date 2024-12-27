@@ -1,9 +1,58 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+sys = System.create(
+  name: "Heroku Demo System"
+)
+
+api = sys.components.create(
+  name: "Demo API",
+  component_type: "app",
+  heroku_id: SecureRandom.uuid,
+  gateway: true,
+  metadata: {
+    health_check: {
+      path: "/health",
+      dependent_paths: "/health"
+    }
+  }
+)
+
+serv1 = sys.components.create(
+  name: "Demo Service 1",
+  component_type: "app",
+  heroku_id: SecureRandom.uuid,
+  gateway: false,
+  metadata: {}
+)
+
+serv2 = sys.components.create(
+  name: "Demo Service 2",
+  component_type: "app",
+  heroku_id: SecureRandom.uuid,
+  gateway: false,
+  metadata: {}
+)
+
+serv3 = sys.components.create(
+  name: "Demo Service 3",
+  component_type: "app",
+  heroku_id: SecureRandom.uuid,
+  gateway: false,
+  metadata: {}
+)
+
+Edge.create(
+  start_node: api,
+  end_node: serv1,
+  metadata: {}
+)
+
+Edge.create(
+  start_node: api,
+  end_node: serv2,
+  metadata: {}
+)
+
+Edge.create(
+  start_node: serv2,
+  end_node: serv3,
+  metadata: {}
+)
