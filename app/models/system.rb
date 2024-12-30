@@ -2,10 +2,14 @@ class System < ApplicationRecord
   has_many :components, class_name: 'Node'
 
   def entry_point
-    components.find_by(gateway: true)
+    components.where(gateway: true)
   end
 
   def traverse
+    graph = build_graph
+  end
+
+  def build_graph
     next_nodes = components.where(gateway: true)
     graph = []
 

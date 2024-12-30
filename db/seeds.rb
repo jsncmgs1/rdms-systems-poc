@@ -8,10 +8,7 @@ api = sys.components.create(
   heroku_id: SecureRandom.uuid,
   gateway: true,
   metadata: {
-    health_check: {
-      path: "/health",
-      dependent_paths: "/health"
-    }
+    uri: "https://localhost:5000/health",
   }
 )
 
@@ -20,7 +17,9 @@ serv1 = sys.components.create(
   component_type: "app",
   heroku_id: SecureRandom.uuid,
   gateway: false,
-  metadata: {}
+  metadata: {
+    uri: "http://localhost:5001/health",
+  }
 )
 
 serv2 = sys.components.create(
@@ -28,7 +27,9 @@ serv2 = sys.components.create(
   component_type: "app",
   heroku_id: SecureRandom.uuid,
   gateway: false,
-  metadata: {}
+  metadata: {
+    uri: "http://localhost:5002/health",
+  }
 )
 
 serv3 = sys.components.create(
@@ -36,7 +37,9 @@ serv3 = sys.components.create(
   component_type: "app",
   heroku_id: SecureRandom.uuid,
   gateway: false,
-  metadata: {}
+  metadata: {
+    uri: "http://localhost:5003/health",
+  }
 )
 
 Edge.create(
